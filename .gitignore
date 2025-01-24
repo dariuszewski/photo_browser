@@ -307,3 +307,4 @@ cython_debug/
 
 firebaseKey.json
 photos/*
+.firebase
