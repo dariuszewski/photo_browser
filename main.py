@@ -17,7 +17,7 @@ def upload_photo(filename: str, blob_name: str ) -> None:
     blob = bucket.blob(blob_name)
     blob.upload_from_filename(filename)
     print(f'File uploaded to Cloud Storage: {filename}')
-    url = f"https://storage.googleapis.com/v0/b/photobrowser-85780.appspot.com/o/{blob_name}?alt=media"
+    url = f"https://firebasestorage.googleapis.com/v0/b/photobrowser-85780.firebasestorage.app/o/{blob_name}?alt=media"
     return url
 
 def add_metadata(title: str, url: str) -> None:
