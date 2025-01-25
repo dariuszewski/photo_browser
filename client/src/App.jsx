@@ -1,14 +1,14 @@
 import './css/App.css'
+import { Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Favourites from './pages/Favourites'
-import { Route, Routes } from 'react-router-dom'
 import NavBar from './components/Navbar'
+import { PhotoProvider } from './contexts/PhotoContext'
 
 function App() {
-  const photoNumber = 1
 
   return (
-    <div>
+    <PhotoProvider>
       <NavBar />
       <main className="main-content">
         <div></div>
@@ -16,8 +16,8 @@ function App() {
           <Route path='/' element={<Home />}></Route>
           <Route path='/favourites' element={<Favourites />}></Route>
         </Routes>
-      </main>
-    </div>
+      </main>  
+    </PhotoProvider>
   )
 }
 

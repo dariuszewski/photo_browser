@@ -3,7 +3,7 @@ const SEARCH_PHOTOS_URL = 'https://search-photos-mtrbtntfeq-uc.a.run.app';
 
 
 export const listPhotos = async () => {
-    const response = await fetch(LIST_PHOTOS_URL, { mode: 'no-cors' });
+    const response = await fetch(LIST_PHOTOS_URL);
     const data = await response.json();
     return data;
 }

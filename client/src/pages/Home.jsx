@@ -24,15 +24,30 @@ function Home() {
         fetchPhotos();
     }, [])
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault()
-        alert('Search button clicked: ' + searchQuery);
+        if (!searchQuery || loading) {
+            return;
+        }
+        setLoading(true);
+        try {
+            const data = await searchPhotos(searchQuery);
+            setPhotos(data);
+            setError(null);
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+            setError("Failed to search photos...");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
         <div className="home">
             <form onSubmit={handleSearch} className="search-form">
                 <input 
+                    id="search-input"
                     type="text" 
                     placeholder="Search for photos..." 
                     className="search-input" 
@@ -50,9 +65,7 @@ function Home() {
                 <div className="photos-grid">
                     {photos.map(
                         (photo) => 
-                            photo.title.toLowerCase().startsWith(searchQuery.toLocaleLowerCase()) && (
-                                <PhotoCard key={photo.id} photo={photo} />
-                            )
+                            <PhotoCard key={photo.id} photo={photo} />
                     )}
                 </div>
             )}

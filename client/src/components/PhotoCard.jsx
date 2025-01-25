@@ -1,10 +1,17 @@
 import '../css/PhotoCard.css';
-
+import { usePhotoContext } from '../contexts/PhotoContext';
 
 function PhotoCard({ photo }) {
+    const {isFavourite, addFavourite, removeFavourite} = usePhotoContext();
+    const favourite = isFavourite(photo.id);
 
-    function onFavouriteClick() {
-        alert('Favourite button clicked');
+    function onFavouriteClick(e) {
+        e.preventDefault();
+        if (favourite) {
+            removeFavourite(photo.id);
+        } else {
+            addFavourite(photo);
+        }
     }
 
     return (
@@ -12,7 +19,10 @@ function PhotoCard({ photo }) {
             <div className="photo-poster">
                 <img src={photo.url} alt={photo.title} />
                 <div className="photo-overlay">
-                    <button className="favourite-btn" onClick={onFavouriteClick}>
+                    <button 
+                        className={`favourite-btn ${favourite ? "active" : ""}`}
+                        onClick={onFavouriteClick}
+                    >
                         ♥
                     </button>
                 </div>
