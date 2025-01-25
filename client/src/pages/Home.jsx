@@ -1,17 +1,28 @@
 import '../css/Home.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { listPhotos, searchPhotos } from "../services/api";
 import PhotoCard from "../components/PhotoCard";
 
 function Home() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [photos, setPhotos] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    const photos = [
-        { id: 1, url: 'https://media.krakow.travel/photos/20627/xxl.jpg', title: 'Florianska', upload_date: '2025-01-21' },
-        { id: 2, url: 'https://media.krakow.travel/photos/20627/xxl.jpg', title: 'Florenska', upload_date: '2025-01-21' },
-        { id: 3, url: 'https://media.krakow.travel/photos/20627/xxl.jpg', title: 'Brancka', upload_date: '2025-01-21' },
-        { id: 4, url: 'https://media.krakow.travel/photos/20627/xxl.jpg', title: 'Warszawska', upload_date: '2025-01-21' },
-        { id: 5, url: 'https://media.krakow.travel/photos/20627/xxl.jpg', title: 'Wawelska', upload_date: '2025-01-21' }
-    ];
+    useEffect(() => {
+        const fetchPhotos = async () => {
+            try {
+                const data = await listPhotos();
+                setPhotos(data);
+            } catch (error) {
+                console.log(error);
+                setError("Failed to load photos...");
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchPhotos();
+    }, [])
 
     const handleSearch = (e) => {
         e.preventDefault()
@@ -32,14 +43,19 @@ function Home() {
                     Search
                 </button>
             </form>
-            <div className="photos-grid">
-                {photos.map(
-                    (photo) => 
-                        photo.title.toLowerCase().startsWith(searchQuery.toLocaleLowerCase()) && (
-                            <PhotoCard key={photo.id} photo={photo} />
-                        )
-                )}
-            </div>
+            {error && <div className='error-message'>{error}</div>}
+            {loading ? (
+                <div className='loading'>Loading...</div>
+            ) : (
+                <div className="photos-grid">
+                    {photos.map(
+                        (photo) => 
+                            photo.title.toLowerCase().startsWith(searchQuery.toLocaleLowerCase()) && (
+                                <PhotoCard key={photo.id} photo={photo} />
+                            )
+                    )}
+                </div>
+            )}
         </div>
     );
 }
